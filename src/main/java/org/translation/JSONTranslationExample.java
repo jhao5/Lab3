@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,13 +39,9 @@ public class JSONTranslationExample {
      */
     public String getCanadaCountryNameSpanishTranslation() {
 
-
         JSONObject canada = jsonArray.getJSONObject(CANADA_INDEX);
         return canada.getString("es");
     }
-
-    // TODO Task: Complete the method below to generalize the above to get the country name
-    //            for any country code and language code from sample.json.
 
     /**
      * Returns the name of the country based on the provided country and language codes.
@@ -60,15 +57,16 @@ public class JSONTranslationExample {
          *
          * @param args not used
          */
-        JSONObject place = jsonArray.getJSONObject(CANADA_INDEX);
-        String word = place.getString("es");
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            if (Objects.equals(jsonObject.getString("alpha3"), countryCode)) {
+                if (jsonObject.has(languageCode)) {
+                    return jsonObject.getString(languageCode);
+                }
+            }
+        }
 
-        try {
-            return word;
-        }
-        catch (JSONException e) {
-            return "Country not found";
-        }
+        return "Country not found";
     }
 
     public static void main(String[] args) {
