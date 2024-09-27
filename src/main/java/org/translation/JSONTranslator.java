@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,8 +18,7 @@ import org.json.JSONObject;
  */
 public class JSONTranslator implements Translator {
 
-    // TODO Task: pick appropriate instance variables for this class
-    private Map<Map<String, Object>, Map<String, String>> translationsByCountry = new HashMap<>();
+    private Map<String, Map<String, String>> countrylanguage;
 
     /**
      * Constructs a JSONTranslator using data from the sample.json resources file.
@@ -37,24 +39,21 @@ public class JSONTranslator implements Translator {
             String jsonString = Files.readString(Paths.get(getClass().getClassLoader().getResource(filename).toURI()));
 
             JSONArray jsonArray = new JSONArray(jsonString);
-
+            countrylanguage = new HashMap<>();
             for (int i = 0; i < jsonArray.length(); i++) {
-                Map<String, Object> code = new HashMap<>();
-                Map<String, String> translation = new HashMap<>();
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                for (String key : jsonObject.keySet()) {
-                    if ("id".equals(key) || "alpha2".equals(key) || "alpha3".equals(key)) {
-                        code.put(key, jsonObject.get(key));
-                    }
-                    else {
-                        translation.put(key, jsonObject.getString(key));
+                JSONObject countryObject = jsonArray.getJSONObject(i);
+                String countryCode = countryObject.getString("alpha2");
+
+                Map<String, String> translations = new HashMap<>();
+                for (String key : countryObject.keySet()) {
+                    if (!"id".equals(key) && !"alpha2".equals(key) && !"alpha3".equals(key)) {
+                        translations.put(key, countryObject.getString(key));
                     }
                 }
-                translationsByCountry.put(code, translation);
+
+                countrylanguage.put(countryCode, translations);
             }
 
-            // TODO Task: use the data in the jsonArray to populate your instance variables
-            //            Note: this will likely be one of the most substantial pieces of code you write in this lab.
         }
         catch (IOException | URISyntaxException ex) {
             throw new RuntimeException(ex);
@@ -63,33 +62,23 @@ public class JSONTranslator implements Translator {
 
     @Override
     public List<String> getCountryLanguages(String country) {
-        // TODO Task: return an appropriate list of language codes,
-        //            but make sure there is no aliasing to a mutable object
-        for (Map.Entry<Map<String, Object>, Map<String, String>> entry : translationsByCountry.entrySet()) {
-            if (entry.getKey().containsValue(country)) {
-                return entry.getValue().keySet().stream().toList();
-            }
+        if (countrylanguage.containsKey(country)) {
+            return new ArrayList<>(countrylanguage.get(country).keySet());
         }
         return new ArrayList<>();
     }
 
     @Override
     public List<String> getCountries() {
-        // TODO Task: return an appropriate list of country codes,
-        //            but make sure there is no aliasing to a mutable object
-        List<String> countries = new ArrayList<>();
-        for (Map.Entry<Map<String, Object>, Map<String, String>> entry : translationsByCountry.entrySet()) {
-            countries.add(Objects.toString(entry.getKey().get("alpha2")));
-        }
-        return countries;
+        return new ArrayList<>(countrylanguage.keySet());
     }
 
     @Override
     public String translate(String country, String language) {
-        // TODO Task: complete this method using your instance variables as needed
-        for (Map.Entry<Map<String, Object>, Map<String, String>> entry : translationsByCountry.entrySet()) {
-            if (entry.getKey().containsValue(country)) {
-                return entry.getValue().get(language);
+        if (countrylanguage.containsKey(country)) {
+            Map<String, String> translations = countrylanguage.get(country);
+            if (translations.containsKey(language)) {
+                return translations.get(language);
             }
         }
         return null;
