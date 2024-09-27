@@ -42,8 +42,7 @@ public class JSONTranslator implements Translator {
             countrylanguage = new HashMap<>();
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject countryObject = jsonArray.getJSONObject(i);
-                String countryCode = countryObject.getString("alpha2");
-
+                String countryCode = countryObject.getString("alpha3");
                 Map<String, String> translations = new HashMap<>();
                 for (String key : countryObject.keySet()) {
                     if (!"id".equals(key) && !"alpha2".equals(key) && !"alpha3".equals(key)) {
@@ -53,7 +52,6 @@ public class JSONTranslator implements Translator {
 
                 countrylanguage.put(countryCode, translations);
             }
-
         }
         catch (IOException | URISyntaxException ex) {
             throw new RuntimeException(ex);
@@ -70,7 +68,7 @@ public class JSONTranslator implements Translator {
 
     @Override
     public List<String> getCountries() {
-        return new ArrayList<>(countrylanguage.keySet());
+        return new ArrayList<>(countrylanguage.keySet().stream().toList());
     }
 
     @Override
