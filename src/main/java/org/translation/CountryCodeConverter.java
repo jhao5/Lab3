@@ -45,9 +45,11 @@ public class CountryCodeConverter {
                 if (parts.length >= 3) {
                     String countryName = parts[0].trim();
                     String alpha3Code = parts[2].trim();
+                    String alpha2Code = parts[1].trim();
                     // Populate the maps
                     codeToCountryMap.put(alpha3Code, countryName);
                     countryToCodeMap.put(countryName, alpha3Code);
+                    codeToCountryMap.put(alpha2Code, countryName);
                 }
             }
 
