@@ -80,7 +80,7 @@ public class Main {
         //      hint: class Collections provides a static sort method
         // TODO Task: convert the country codes to the actual country names before sorting
         CountryCodeConverter countrycode = new CountryCodeConverter();
-        List<String> con = new ArrayList();
+        List<String> con = new ArrayList<>();
         for (String country : countries) {
             String countryname = countrycode.fromCountryCode(country);
             con.add(countryname);
@@ -104,7 +104,7 @@ public class Main {
         //  one per line
         // TODO Task: convert the language codes to the actual language names before sorting
         LanguageCodeConverter languagecode = new LanguageCodeConverter();
-        List<String> lan = new ArrayList();
+        List<String> lan = new ArrayList<>();
         for (String language : languages) {
             String languagename = languagecode.fromLanguageCode(language);
             lan.add(languagename);
