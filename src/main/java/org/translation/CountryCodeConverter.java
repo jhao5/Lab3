@@ -45,11 +45,11 @@ public class CountryCodeConverter {
                 if (parts.length >= 3) {
                     String countryName = parts[0].trim();
                     String alpha3Code = parts[2].trim();
-                    String alpha2Code = parts[1].trim();
+
                     // Populate the maps
                     codeToCountryMap.put(alpha3Code, countryName);
                     countryToCodeMap.put(countryName, alpha3Code);
-                    codeToCountryMap.put(alpha2Code, countryName);
+
                 }
             }
 
@@ -66,7 +66,10 @@ public class CountryCodeConverter {
      * @return the name of the country corresponding to the code, or null if not found
      */
     public String fromCountryCode(String code) {
-        return codeToCountryMap.get(code);
+        if (codeToCountryMap.containsKey(code)) {
+            return codeToCountryMap.get(code);
+        }
+        return null;
     }
 
     /**
@@ -75,7 +78,10 @@ public class CountryCodeConverter {
      * @return the 3-letter code of the country corresponding to the name, or null if not found
      */
     public String fromCountry(String country) {
-        return countryToCodeMap.get(country);
+        if (countryToCodeMap.containsKey(country)) {
+            return countryToCodeMap.get(country);
+        }
+        return null;
     }
 
     /**
