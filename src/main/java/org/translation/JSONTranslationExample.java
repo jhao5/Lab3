@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -27,7 +26,8 @@ public class JSONTranslationExample {
             String jsonString = Files.readString(Paths.get(getClass().getClassLoader()
                     .getResource("sample.json").toURI()));
             this.jsonArray = new JSONArray(jsonString);
-        } catch (IOException | URISyntaxException ex) {
+        }
+        catch (IOException | URISyntaxException ex) {
             throw new RuntimeException(ex);
         }
     }
@@ -52,22 +52,18 @@ public class JSONTranslationExample {
      */
     public String getCountryNameTranslation(String countryCode, String languageCode) {
 
-        /**
-         * Prints the Spanish translation of Canada.
-         *
-         * @param args not used
-         */
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
-            if (Objects.equals(jsonObject.getString("alpha3"), countryCode)) {
-                if (jsonObject.has(languageCode)) {
-                    return jsonObject.getString(languageCode);
-                }
+            if (Objects.equals(jsonObject.getString("alpha3"), countryCode) && jsonObject.has(languageCode)) {
+                return jsonObject.getString(languageCode);
             }
         }
-
         return "Country not found";
     }
+    /**
+     * Prints the Spanish translation of Canada.
+     * @param args not used
+     */
 
     public static void main(String[] args) {
         JSONTranslationExample jsonTranslationExample = new JSONTranslationExample();
