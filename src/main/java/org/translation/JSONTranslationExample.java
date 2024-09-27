@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -26,7 +26,8 @@ public class JSONTranslationExample {
             String jsonString = Files.readString(Paths.get(getClass().getClassLoader()
                     .getResource("sample.json").toURI()));
             this.jsonArray = new JSONArray(jsonString);
-        } catch (IOException | URISyntaxException ex) {
+        }
+        catch (IOException | URISyntaxException ex) {
             throw new RuntimeException(ex);
         }
     }
@@ -38,13 +39,9 @@ public class JSONTranslationExample {
      */
     public String getCanadaCountryNameSpanishTranslation() {
 
-
         JSONObject canada = jsonArray.getJSONObject(CANADA_INDEX);
         return canada.getString("es");
     }
-
-    // TODO Task: Complete the method below to generalize the above to get the country name
-    //            for any country code and language code from sample.json.
 
     /**
      * Returns the name of the country based on the provided country and language codes.
@@ -55,21 +52,18 @@ public class JSONTranslationExample {
      */
     public String getCountryNameTranslation(String countryCode, String languageCode) {
 
-        /**
-         * Prints the Spanish translation of Canada.
-         *
-         * @param args not used
-         */
-        JSONObject place = jsonArray.getJSONObject(CANADA_INDEX);
-        String word = place.getString("es");
-
-        try {
-            return word;
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            if (Objects.equals(jsonObject.getString("alpha3"), countryCode) && jsonObject.has(languageCode)) {
+                return jsonObject.getString(languageCode);
+            }
         }
-        catch (JSONException e) {
-            return "Country not found";
-        }
+        return "Country not found";
     }
+    /**
+     * Prints the Spanish translation of Canada.
+     * @param args not used
+     */
 
     public static void main(String[] args) {
         JSONTranslationExample jsonTranslationExample = new JSONTranslationExample();

@@ -13,8 +13,8 @@ import java.util.Map;
  */
 public class CountryCodeConverter {
 
-    private Map<String, String> codeToCountryMap;
-    private Map<String, String> countryToCodeMap;
+    private final Map<String, String> codeToCountryMap;
+    private final Map<String, String> countryToCodeMap;
 
     /**
      * Default constructor which will load the country codes from "country-codes.txt"
@@ -45,9 +45,11 @@ public class CountryCodeConverter {
                 if (parts.length >= 3) {
                     String countryName = parts[0].trim();
                     String alpha3Code = parts[2].trim();
+
                     // Populate the maps
                     codeToCountryMap.put(alpha3Code, countryName);
                     countryToCodeMap.put(countryName, alpha3Code);
+
                 }
             }
 
@@ -64,7 +66,10 @@ public class CountryCodeConverter {
      * @return the name of the country corresponding to the code, or null if not found
      */
     public String fromCountryCode(String code) {
-        return codeToCountryMap.get(code);
+        if (codeToCountryMap.containsKey(code.toUpperCase())) {
+            return codeToCountryMap.get(code.toUpperCase());
+        }
+        return null;
     }
 
     /**
@@ -73,7 +78,10 @@ public class CountryCodeConverter {
      * @return the 3-letter code of the country corresponding to the name, or null if not found
      */
     public String fromCountry(String country) {
-        return countryToCodeMap.get(country);
+        if (countryToCodeMap.containsKey(country)) {
+            return countryToCodeMap.get(country);
+        }
+        return null;
     }
 
     /**
