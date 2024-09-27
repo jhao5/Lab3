@@ -12,7 +12,7 @@ import java.util.Map;
  * This class provides the service of converting country codes to their names.
  */
 public class CountryCodeConverter {
-
+    public static final int SPACE = 3;
     private final Map<String, String> codeToCountryMap;
     private final Map<String, String> countryToCodeMap;
 
@@ -29,6 +29,7 @@ public class CountryCodeConverter {
      * @param filename the name of the file in the resources folder to load the data from
      * @throws RuntimeException if the resource file can't be loaded properly
      */
+
     public CountryCodeConverter(String filename) {
 
         // Initialize the HashMaps
@@ -42,7 +43,7 @@ public class CountryCodeConverter {
             for (int i = 1; i < lines.size(); i++) {
                 String line = lines.get(i);
                 String[] parts = line.split("\t");
-                if (parts.length >= 3) {
+                if (parts.length >= SPACE) {
                     String countryName = parts[0].trim();
                     String alpha3Code = parts[2].trim();
 
