@@ -49,7 +49,7 @@ public class Main {
             //            name rather than the 3-letter country code, you will need to
             //            convert it back to its 3-letter country code when calling promptForLanguage
             CountryCodeConverter cc = new CountryCodeConverter();
-            String countrycode = cc.fromCountry(country);
+            String countrycode = cc.fromCountry(country).toLowerCase();
             String language = promptForLanguage(translator, countrycode);
             if (quit.equals(language)) {
                 break;
@@ -60,7 +60,7 @@ public class Main {
             //            Note: you should use the actual names in the message printed below though,
             //            since the user will see the displayed message.
             LanguageCodeConverter lc = new LanguageCodeConverter();
-            String languagecode = lc.fromLanguage(language);
+            String languagecode = lc.fromLanguage(language).toLowerCase();
             System.out.println(country + " in " + language + " is " + translator.translate(countrycode, languagecode));
             System.out.println("Press enter to continue or quit to exit.");
             Scanner s = new Scanner(System.in);
